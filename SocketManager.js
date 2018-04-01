@@ -2,7 +2,7 @@ const { io } = require('./index.js');
 
 let connectedUsers = { };
 
-const { VERIFY_USER, USER_CONNECTED, LOGOUT } = require('./Events');
+const { VERIFY_USER, USER_CONNECTED, LOGOUT, USERS_CHANGED } = require('./Events');
 
 const { createChat, createMessage, createUser } = require('./Factories');
 
@@ -12,12 +12,14 @@ module.exports = (socket) => {
   socket.on(VERIFY_USER, (nickname, callback) => {
     if (isUser(connectedUsers, nickname)) {
       callback({
-        isUser: true, user: null
+        isUser: true,
+        user: null
       });
     }
     else {
       callback({
-        isUser: false, user: createUser({ name: nickname })
+        isUser: false,
+        user: createUser({ name: nickname })
       });
     }
   });
@@ -29,11 +31,17 @@ module.exports = (socket) => {
 
     io.emit(USER_CONNECTED, connectedUsers);
 
+    // bağlı kullanıcı listesi tekrar gönderiliyor
+    io.emit(USERS_CHANGED, connectedUsers);
+
     console.log(connectedUsers);
   });
 
   socket.on(LOGOUT, (username) => {
     connectedUsers = removeUser(connectedUsers, username);
+
+    // bağlı kullanıcı listesi tekrar gönderiliyor
+    io.emit(USERS_CHANGED, connectedUsers);
 
     console.log(connectedUsers);
   });

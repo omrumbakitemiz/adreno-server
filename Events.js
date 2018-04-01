@@ -7,4 +7,5 @@ module.exports = {
   TYPING: 'TYPING',
   VERIFY_USER: 'VERIFY_USER',
   LOGOUT: 'LOGOUT',
+  USERS_CHANGED: 'USERS_CHANGED'
 };

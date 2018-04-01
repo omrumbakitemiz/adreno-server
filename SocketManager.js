@@ -1,4 +1,4 @@
-const io = require('./index.js').io;
+const { io } = require('./index.js');
 
 let connectedUsers = { };
 
@@ -28,6 +28,12 @@ module.exports = (socket) => {
     socket.user = user;
 
     io.emit(USER_CONNECTED, connectedUsers);
+
+    console.log(connectedUsers);
+  });
+
+  socket.on(LOGOUT, (username) => {
+    connectedUsers = removeUser(connectedUsers, username);
 
     console.log(connectedUsers);
   });

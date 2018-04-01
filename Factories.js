@@ -26,10 +26,12 @@ const createChat = ({ messages = [], name = 'Community', users = [] } = {}) => (
   }
 );
 
-const getTime = date => `${date.getHours()}:${('0' + date.getMinutes()).slice(-2)}`;
+// const getTime = date => `${date.getHours()}:${('0' + date.getMinutes()).slice(-2)}`;
+const getTime = date => `${date.getHours()}:${(`0+${date.getMinutes()}`).slice(-2)}`;
 
 module.exports = {
   createMessage,
   createChat,
-  createUser
+  createUser,
+  getTime
 };

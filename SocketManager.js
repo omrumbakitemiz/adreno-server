@@ -1,19 +1,18 @@
 const { io } = require('./index.js');
 
-// let connectedUsers = { };
-const connectedUsers2 = [];
+const connectedUsers = [];
 
-const { VERIFY_USER, USER_CONNECTED, LOGOUT, USERS_CHANGED } = require('./Events');
+const {
+  VERIFY_USER, USER_CONNECTED, LOGOUT, USERS_CHANGED, PRIVATE_CHAT
+} = require('./Events');
 
 const { createChat, createMessage, createUser } = require('./Factories');
 
 module.exports = (socket) => {
   console.log(`Socket Id: ${socket.id}`);
 
-  // socket.on(VERIFY_USER, (nickname, callback) => {
   socket.on(VERIFY_USER, (nickname, callback) => {
-    // if (isUser(connectedUsers, nickname)) {
-    if (isUser2(connectedUsers2, nickname)) {
+    if (isUser(connectedUsers, nickname)) {
       callback({
         isUser: true,
         user: null
@@ -22,33 +21,35 @@ module.exports = (socket) => {
     else {
       callback({
         isUser: false,
-        user: createUser({ name: nickname })
+        user: createUser({ name: nickname, socketId: socket.id })
       });
     }
   });
 
   socket.on(USER_CONNECTED, (user) => {
-    // connectedUsers = addUser(connectedUsers, user);
-    addUser2(connectedUsers2, user);
+    addUser(connectedUsers, user);
 
     socket.user = user;
 
-    io.emit(USER_CONNECTED, connectedUsers2);
+    io.emit(USER_CONNECTED, connectedUsers);
 
     // bağlı kullanıcı listesi tekrar gönderiliyor
-    io.emit(USERS_CHANGED, connectedUsers2);
+    io.emit(USERS_CHANGED, connectedUsers);
   });
 
   socket.on(LOGOUT, (user) => {
-    // connectedUsers = removeUser(connectedUsers, username);
-    removeUser2(connectedUsers2, user);
+    removeUser(connectedUsers, user);
 
     // bağlı kullanıcı listesi tekrar gönderiliyor
-    io.emit(USERS_CHANGED, connectedUsers2);
+    io.emit(USERS_CHANGED, connectedUsers);
+  });
+
+  socket.on(PRIVATE_CHAT, (socketId, sender, receiver, text, date) => {
+    socket.to(socketId).emit('privateMessage', sender, receiver, text, date);
   });
 };
 
-function isUser2(userList, username) {
+function isUser(userList, username) {
   let result = false;
 
   userList.forEach((user) => {
@@ -60,27 +61,11 @@ function isUser2(userList, username) {
   return result;
 }
 
-function addUser2(userList, user) {
+function addUser(userList, user) {
   userList.push(user);
 }
 
-function removeUser2(userList, user) {
+function removeUser(userList, user) {
   const index = userList.indexOf(user);
   userList.splice(index, 1);
 }
-
-// function isUser(userList, username) {
-//   return username in userList;
-// }
-
-// function addUser(userList, user) {
-//   const newList = Object.assign({}, userList);
-//   newList[user.name] = user;
-//   return newList;
-// }
-
-// function removeUser(userList, username) {
-//   const newList = Object.assign({}, userList);
-//   delete newList[username];
-//   return newList;
-// }

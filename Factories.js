@@ -1,7 +1,8 @@
 const uuidv4 = require('uuid/v4');
 
-const createUser = ({ name = '', socketId = '' } = {}) => ({
+const createUser = ({ name = '', ipAddress, socketId = '' } = {}) => ({
   id: uuidv4(),
+  ipAddress,
   name,
   socketId
 });
@@ -22,7 +23,7 @@ const createChat = ({ messages = [], name = 'Community', users = [] } = {}) => (
 });
 
 // const getTime = date => `${date.getHours()}:${('0' + date.getMinutes()).slice(-2)}`;
-const getTime = date => `${date.getHours()}:${(`0+${date.getMinutes()}`).slice(-2)}`;
+const getTime = date => `${date.getHours()}:${`0+${date.getMinutes()}`.slice(-2)}`;
 
 module.exports = {
   createMessage,

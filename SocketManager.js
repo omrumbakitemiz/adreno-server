@@ -11,12 +11,11 @@ const {
   COMMUNITY_CHAT
 } = require('./Events');
 
-const { createChat, createMessage, createUser } = require('./Factories');
+const { createUser } = require('./Factories');
 
 module.exports = (socket) => {
-  console.log(`Socket Id: ${socket.id}`);
-
-  socket.on(VERIFY_USER, (nickname, callback) => {
+  socket.on(VERIFY_USER, (nickname, ipAddress, callback) => {
+    console.log('ip: ', ipAddress);
     if (isUser(connectedUsers, nickname)) {
       callback({
         isUser: true,
@@ -25,7 +24,7 @@ module.exports = (socket) => {
     } else {
       callback({
         isUser: false,
-        user: createUser({ name: nickname, socketId: socket.id })
+        user: createUser({ name: nickname, ipAddress, socketId: socket.id })
       });
     }
   });

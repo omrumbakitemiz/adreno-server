@@ -1,7 +1,7 @@
 const app = require('http').createServer();
-const io = module.exports.io = require('socket.io')(app);
+const io = (module.exports.io = require('socket.io')(app));
 
-io.set('origins', 'http://localhost:3000');
+io.set('origins', '*:*');
 
 const PORT = process.env.PORT || 2112;
 

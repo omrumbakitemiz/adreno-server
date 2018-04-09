@@ -3,7 +3,12 @@ const { io } = require('./index.js');
 const connectedUsers = [];
 
 const {
-  VERIFY_USER, USER_CONNECTED, LOGOUT, USERS_CHANGED, PRIVATE_CHAT
+  VERIFY_USER,
+  USER_CONNECTED,
+  LOGOUT,
+  USERS_CHANGED,
+  PRIVATE_CHAT,
+  COMMUNITY_CHAT
 } = require('./Events');
 
 const { createChat, createMessage, createUser } = require('./Factories');
@@ -17,8 +22,7 @@ module.exports = (socket) => {
         isUser: true,
         user: null
       });
-    }
-    else {
+    } else {
       callback({
         isUser: false,
         user: createUser({ name: nickname, socketId: socket.id })
@@ -46,6 +50,10 @@ module.exports = (socket) => {
 
   socket.on(PRIVATE_CHAT, (socketId, sender, receiver, text, date) => {
     socket.to(socketId).emit('privateMessage', sender, receiver, text, date);
+  });
+
+  socket.on(COMMUNITY_CHAT, (sender, text, date) => {
+    io.emit(COMMUNITY_CHAT, sender, text, date);
   });
 };
 

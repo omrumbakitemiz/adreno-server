@@ -3,7 +3,7 @@ const io = (module.exports.io = require('socket.io')(app));
 
 io.set('origins', '*:*');
 
-const PORT = process.env.PORT || 2112;
+const PORT = process.env.PORT || 80;
 
 const SocketManager = require('./SocketManager');
 

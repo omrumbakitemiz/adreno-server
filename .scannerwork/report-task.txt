@@ -2,5 +2,5 @@ projectKey=adreno-server
 serverUrl=http://localhost:9000
 serverVersion=7.0.0.36138
 dashboardUrl=http://localhost:9000/dashboard/index/adreno-server
-ceTaskId=AWLPamktpNGSnDX8t3xW
-ceTaskUrl=http://localhost:9000/api/ce/task?id=AWLPamktpNGSnDX8t3xW
+ceTaskId=AWLapc80r1J-K9W5cuUu
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AWLapc80r1J-K9W5cuUu
